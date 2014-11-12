@@ -1,0 +1,12 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+
+{% extends "base.html" %}
+
+{% block title %}The Template Test{% endblock %}
+
+{% block content %}
+<p>The context is {{ app }} {{ user }} {{ ip_address }}.</p>
+<p>The Massage is {{ message }}.</p>
+{% endblock %}
