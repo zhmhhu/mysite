@@ -1,11 +1,11 @@
-from django.conf.urls.defaults import patterns,include
+from django.conf.urls.defaults import *
 #from mysite.views import current_datetime,hours_ahead,hello,ua_display,display_meta
 from mysite.books import views
 
 from django.views.generic import list_detail
 from mysite.books.models import Publisher
 
-
+from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -33,7 +33,7 @@ urlpatterns = patterns('mysite.views',
     (r'^search/$', views.search),
     (r'^mydata/(?P<month>\w{3})/(?P<day>\d\d)/$', views.my_view),
     (r'^weblog/', include('mysite.blog.urls')),
-    (r'^about/$', 'mysite.views.about'),
+    (r'^about/$', direct_to_template, {'template': 'about.html'}),
 )
 
 urlpatterns += patterns('mysite.contact.views',

@@ -1,8 +1,8 @@
-# Django settings for mysite project.
 #-*- coding:utf-8 -*-
+# Django settings for mysite project.
 import os
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
