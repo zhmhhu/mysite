@@ -3,6 +3,7 @@
 import os
 
 DEBUG = False
+
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -11,12 +12,23 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASE_ENGINE = 'sqlite3'
-DATABASE_NAME = 'D:\\workspace\\mysite\\src\\sqlite.db'
-DATABASE_USER = ''
-DATABASE_PASSWORD = ''
-DATABASE_HOST = ''
-DATABASE_PORT = ''
+# DATABASE_ENGINE = 'sqlite3'
+# DATABASE_NAME = 'D:\\workspace\\mysite\\src\\sqlite.db'
+# DATABASE_USER = ''
+# DATABASE_PASSWORD = ''
+# DATABASE_HOST = ''
+# DATABASE_PORT = ''
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'D:\\workspace\\mysite\\src\\sqlite.db',  # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
 
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -67,6 +79,7 @@ ADMIN_MEDIA_PREFIX = '/media/'
 SECRET_KEY = '27xuuf+h6k$9h7qtv7h8a&amp;elirm)0s#b(bn--*fu&amp;)i#2pu1=@'
 
 # List of callables that know how to import templates from various sources.
+
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.load_template_source',
     'django.template.loaders.app_directories.load_template_source',

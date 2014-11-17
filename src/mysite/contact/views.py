@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+
 from mysite.contact.forms import ContactForm
 from django.template import loader, RequestContext
 from django.template import Template
+
+
+from django.shortcuts import HttpResponse,render_to_response
+
 
 '''def contact(request):
     errors = []
@@ -96,3 +100,95 @@ def mycontext(request):
             { 'context': context})
     return render_to_response('sendcontext.html', {'errors': errors})
 
+
+#cookies test
+def show_color(request):
+    if "favorite_color" in request.COOKIES:
+        return HttpResponse("Your favorite color is %s" %request.COOKIES["favorite_color"])
+    else:
+        #return HttpResponse("You don't have a favorite color.")
+        return render_to_response('color_form.html')
+    
+#如果request没有数据，则显示cookies数据，每一次request提交，则写一次cookies
+def set_color(request):
+    if "favorite_color" in request.GET:
+        favorite_color=request.GET['favorite_color']
+        # Create an HttpResponse object...
+        response = HttpResponse("Your favorite color is now %s" %request.GET["favorite_color"])
+        # ... and set a cookie on the response
+        response.set_cookie("favorite_color",
+                            request.GET["favorite_color"])
+        #return response
+        return render_to_response('color_form.html',{ 'favorite_color': favorite_color})
+    elif"favorite_color" in request.COOKIES:
+        #return HttpResponse("Your favorite color is %s" %request.COOKIES["favorite_color"]) 
+        return render_to_response('color_form.html', {'favorite_color': request.COOKIES["favorite_color"]})     
+    else:
+        #return HttpResponse("You didn't give a favorite color.")
+        return render_to_response('color_form.html')
+
+#session test
+
+from django.http import Http404
+def post_comment(request,comments):    #加入了参数，原书中没有
+    if request.method != 'POST':
+        raise Http404('Only POSTs are allowed')
+
+    if 'comment' not in request.POST:
+        raise Http404('Comment not submitted')
+
+    if request.session.get('has_commented', False):
+        return HttpResponse("You've already commented.")
+
+    c = comments.Comment(comment=request.POST['comment'])
+    c.save()
+    request.session['has_commented'] = True
+    return HttpResponse('Thanks for your comment!')
+
+
+#login test
+def login(request,Member):     #加入了参数，原书中没有
+    if request.method != 'POST':
+        raise Http404('Only POSTs are allowed')
+    try:
+        m = Member.objects.get(username=request.POST['username'])
+        if m.password == request.POST['password']:
+            request.session['member_id'] = m.id
+            return HttpResponseRedirect('/you-are-logged-in/')
+    except Member.DoesNotExist:
+        return HttpResponse("Your username and password didn't match.")
+    if request.method == 'POST':
+
+        # Check that the test cookie worked (we set it below):
+        if request.session.test_cookie_worked():
+
+            # The test cookie worked, so delete it.
+            request.session.delete_test_cookie()
+
+            # In practice, we'd need some logic to check username/password
+            # here, but since this is an example...
+            try:
+                m = Member.objects.get(username=request.POST['username'])
+                if m.password == request.POST['password']:
+                    request.session['member_id'] = m.id
+                    return HttpResponseRedirect('/you-are-logged-in/')
+            except Member.DoesNotExist:
+                    return HttpResponse("Your username and password didn't match.")
+            return HttpResponse("You're logged in.")
+
+        # The test cookie failed, so display an error message. If this
+        # were a real site, we'd want to display a friendlier message.
+        else:
+            return HttpResponse("Please enable cookies and try again.")
+
+    # If we didn't post, send the test cookie along with the login form.
+    request.session.set_test_cookie()
+    return render_to_response('foo/login_form.html')
+    
+#login out test    
+def logout(request):
+    try:
+        del request.session['member_id']
+    except KeyError:
+        pass
+    return HttpResponse("You're logged out.")

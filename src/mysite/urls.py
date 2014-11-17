@@ -40,7 +40,9 @@ urlpatterns += patterns('mysite.contact.views',
     (r'^contact/$', 'contact'), 
     (r'^context/$', 'mycontext'), 
     (r'^view1/$', 'view_1'), 
-    (r'^view2/$', 'view_2'),                  
+    (r'^view2/$', 'view_2'),
+    (r'^color/$', 'set_color'),                    
+
 )
 
 from mysite.books.models import Book
